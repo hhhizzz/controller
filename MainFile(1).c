@@ -276,7 +276,16 @@ void reverse2() 				//change to right and left's going through
 	EI();
 }
 __interrupt void timer_INTTM000(){
-
+    if (mode == 3)						//Select auto model
+    {
+        if (P15.0 == 0)
+        {
+            reverse1();				//change to down and up's going through
+        }
+        else if (P15.0 == 1)
+        {
+            reverse2();				//change to right and left's going through
+    }
 }
 
 int main()
@@ -329,24 +338,6 @@ int main()
 	lcdA();								//Display auto model on LCD
 	while(1)
 	{
-
-
-		if (mode == 3)						//Select auto model
-		{
-
-
-			if (P15.0 == 0)
-			{
-				reverse1();				//change to down and up's going through
-				delay((time + Ycars * 10) % 600);	//Set duration base on passing car
-			}
-			else if (P15.0 == 1)
-			{
-				reverse2();				//change to right and left's going through
-				delay((time + Xcars * 10) % 600);	//Set duration base on passing car
-			}
-
-		}
 		else if (mode == 4)					//Selet manual model
 		{
 			switch(KEY)
