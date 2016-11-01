@@ -14,8 +14,9 @@ int time;			//Duration of liting
 int Ycars=0;			//Quantity of down and up's car
 int Xcars=0;			//Quantity of right and left's car
 int mode = 3;
+int DelayTime=4;        //Time to change the Lishts
 
-int DelayTime=3;        //Time to change the Lishts
+
 void LCDS(char i,int position){ //Show numbers
     unsigned int addr;
 	addr=STARTADDR+position*2;
@@ -89,6 +90,7 @@ void lcdM()			//Storage the "nU" for LCD display
 {
 	LCDS('n',0);
 	LCDS('U',1);
+    LCDS('-',3);
 	LCDS('-',6);
 	LCDS('-',7);
 }
@@ -123,7 +125,7 @@ void inter_key()		//Interrupt of key
 		case 0x3E:
 		{
 			//No.1 bottom: pass a car of right and left
-			if(mode==3){	//Only when the mode is auto
+			if(mode==3&&P13.2==0){	//Only when the mode is auto and the Light is red
 			    Xcars++;
 			    LCDS(Xcars+'0', 6);
 			}
@@ -132,7 +134,7 @@ void inter_key()		//Interrupt of key
 		case 0x3D:
 		{
 			//No.2 bottom: pass a car of down and up
-			if(mode==3){
+			if(mode==3&&P15.3==0){
 			    Ycars++;
 			    LCDS(Ycars+'0', 7);
 			}
@@ -275,16 +277,27 @@ __interrupt void timer_INTTM000(){
     if (mode == 3)						//Select auto model
     {
         DelayTime--;
+        LCDS(DelayTime+'0',3);
         if (P15.0 == 0&&DelayTime == 0)
         {
-            reverse1();				//change to down and up's going through
-            DelayTime=3;
+            if(Xcars<=4){
+                DelayTime=4;
+            }
+            else{
+                DelayTime=Xcars>9?9:Xcars;
+            }
+	    reverse1();				//change to down and up's going through
         }
         else if (P15.0 == 1&&DelayTime == 0)
         {
-            reverse2();				//change to right and left's going through
-            DelayTime=3;
-	    }
+            if(Ycars<=4){
+                DelayTime=4;
+            }
+            else{
+                DelayTime=Ycars>9?9:Ycars;
+            }
+	    reverse2();				//change to right and left's going through
+	}
     }
 }
 
