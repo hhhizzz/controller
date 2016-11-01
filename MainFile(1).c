@@ -14,8 +14,8 @@ int time;			//Duration of liting
 int Ycars=0;			//Quantity of down and up's car
 int Xcars=0;			//Quantity of right and left's car
 int mode = 3;
-int second=0;
-int seconds=0;
+
+int DelayTime=3;        //Time to change the Lishts
 void LCDS(char i,int position){ //Show numbers
     unsigned int addr;
 	addr=STARTADDR+position*2;
@@ -91,10 +91,6 @@ void lcdM()			//Storage the "nU" for LCD display
 	LCDS('U',1);
 	LCDS('-',6);
 	LCDS('-',7);
-}
-
-void setDelayTime(int seconds){
-    CR000=0x7fff*second;
 }
 
 void delay(int k)		//Delay function by software
@@ -278,13 +274,17 @@ void reverse2() 				//change to right and left's going through
 __interrupt void timer_INTTM000(){
     if (mode == 3)						//Select auto model
     {
-        if (P15.0 == 0)
+        DelayTime--;
+        if (P15.0 == 0&&DelayTime == 0)
         {
             reverse1();				//change to down and up's going through
+            DelayTime=3;
         }
-        else if (P15.0 == 1)
+        else if (P15.0 == 1&&DelayTime == 0)
         {
             reverse2();				//change to right and left's going through
+            DelayTime=3;
+	    }
     }
 }
 
@@ -313,12 +313,12 @@ int main()
 	LCDMD = 0X30;
 	LCDM = 0XC0;
 	//INitial Timer
-	CRC00.0=0;
-	PRM00=0x04;
-	setDelayTime(1);
-	TMMK010=1;
-	TMMK000=0;
-	TMC00=0x0c;
+    CRC00.0=0;
+    PRM00=0x04;
+    CR000=0x7fff;
+    TMMK010=1;
+    TMMK000=0;
+    TMC00=0x0c;
 
 
 	EI();					//Open interruption
@@ -338,7 +338,7 @@ int main()
 	lcdA();								//Display auto model on LCD
 	while(1)
 	{
-		else if (mode == 4)					//Selet manual model
+		if (mode == 4)					//Selet manual model
 		{
 			switch(KEY)
 			{
@@ -362,15 +362,6 @@ int main()
 			case 3: mode = 3; break;
 			case 4: mode = 4; break;
 		}
-
-
-
-
-
-
-
-
-
 
 	}
 	return 0;
