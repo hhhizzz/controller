@@ -274,11 +274,11 @@ void reverse2() 				//change to right and left's going through
 	EI();
 }
 __interrupt void timer_INTTM000(){
-    if (mode == 3)						//Select auto model
+    if (mode == 3)						//when it is the auto model
     {
         DelayTime--;
         LCDS(DelayTime+'0',3);
-        if (P15.0 == 0&&DelayTime == 0)
+        if (P15.0 == 0&&DelayTime == 0) //set the clock
         {
             if(Xcars<=4){
                 DelayTime=4;
@@ -297,7 +297,7 @@ __interrupt void timer_INTTM000(){
                 DelayTime=Ycars>9?9:Ycars;
             }
 	    reverse2();				//change to right and left's going through
-	}
+	    }
     }
 }
 
