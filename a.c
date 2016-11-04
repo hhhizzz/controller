@@ -35,40 +35,37 @@ void nextLight0(){
     switch (mod) {          //每次闪光就修改下次闪光类型
         case 0:
         case 1:
-            P13.1=!P13.1;
-	        P13.0=!P13.0;
-	    mod++;
-            break;
         case 2:
-        case 3:
-            P13.3=!P13.3;
-	        P13.2=!P13.2;
+            P13.1=!P13.1;
+            P13.0=!P13.0;
+            P13.2=!P13.2;
             mod++;
             break;
+        case 3:
         case 4:
         case 5:
 	        P14.0=!P14.0;
+            P13.3=!P13.3;
             P14.1=!P14.1;
             mod++;
             break;
         case 6:
         case 7:
-            P14.3=!P14.3;
-	        P14.2=!P14.2;
-            mod++;
-            break;
         case 8:
-        case 9:
-	        P15.0=!P15.0;
-            P15.1=!P15.1;
+            P14.3=!P14.3;
+            P14.2=!P14.2;
+            P15.0=!P15.0;
             mod++;
             break;
+        case 9:
         case 10:
+            P15.1=!P15.1;
 	        P15.2=!P15.2;
             P15.3=!P15.3;
             mod++;
 	    break;
         case 11:
+            P15.1=!P15.1;
 	        P15.2=!P15.2;
             P15.3=!P15.3;
             mod=0;
